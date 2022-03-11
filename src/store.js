@@ -1,73 +1,10 @@
 import { createStore } from "vuex";
 
-import names from './../data/names.json';
-const data = await import('./../data/data.json');
-const namesItems = names;
-
-const random = (min, max) => {
-    return Math.floor(Math.random() * (max - min)) + min;
-};
-
-// const allData = Object.entries(namesItems).map((nameItem) => {
-//     const filteredItems = items.filter(itm => itm.G == nameItem[0]);
-//     const formattedItems = filteredItems.map((i) => {
-//         return {
-//             price: i.C,
-//             groupName: nameItem[1].G,
-//             groupId: i.G,
-//             id: i.T ,
-//             name: nameItem[1].B[i.T].N,
-//             leftover: i.P,
-//             currency: rateCurrency
-//         }
-//     })
-
-//     return {
-//         nameGroup: nameItem[1].G,
-//         items: formattedItems
-//     }
-// });
-
-const formattingData = (items, names, currentExchangeRate) => {
-    const allData = Object.entries(names).map((nameItem) => {
-        const filteredItems = items.filter(itm => itm.G == nameItem[0]);
-        const formattedItems = filteredItems.map((i) => {
-            return {
-                price: i.C,
-                groupName: nameItem[1].G,
-                groupId: i.G,
-                id: i.T ,
-                name: nameItem[1].B[i.T].N,
-                leftover: i.P,
-                currency: currentExchangeRate
-            }
-        })
-    
-        return {
-            nameGroup: nameItem[1].G,
-            items: formattedItems
-        }
-    });
-
-    return allData;
-}
-
-const allData = {
-    t: formattingData(data.Value.Goods, namesItems, random(20, 80))
-};
-
-const queries = setInterval(() => {
-    const items = data.Value.Goods;
-    const currencyRate = random(20, 80);
-    allData.t = formattingData(items, namesItems, currencyRate);
-}, 1000);
-
-
 const store = createStore({
     state: {
         count: 0,
         busketItems: [],
-        storeItems: allData.t
+        storeItems: []
     },
     mutations: {
         CHANGE_BUSKET(state, payload) {
@@ -117,12 +54,6 @@ const store = createStore({
         }
     },
     getters: {
-        doubleCount(state, getters) {
-            return state.count * 2;
-        },
-        doubleCountPlusOne(state, getters) {
-            return getters.doubleCount + 1;
-        },
         allDataState(state) {
             return state.storeItems;
         },
