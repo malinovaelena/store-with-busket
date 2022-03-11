@@ -1,4 +1,6 @@
 <script>
+import { useActions } from "vuex-composition-helpers/dist";
+import { useStore } from 'vuex';
 import Items from "@/components/Items.vue";
 import Busket from "@/components/Busket.vue";
 
@@ -38,36 +40,39 @@ const allData = {
     t: formattingData(data.Value.Goods, namesItems, random(20, 80))
 };
 
-const queries = setInterval(() => {
-    const items = data.Value.Goods;
-    const currencyRate = random(20, 80);
-    allData.t = formattingData(items, namesItems, currencyRate);
-}, 1000);
-
 export default {
-  components: {
-    Items,
-    Busket
-  },
-  setup() {
+	components: {
+		Items,
+		Busket
+	},
+	setup() {
+		const store = useStore();
+		const { setNewItems } = useActions(['setNewItems']);
 
-  }
+		const queries = setInterval(() => {
+			const items = data.Value.Goods;
+			const currencyRate = random(20, 80);
+			allData.t = formattingData(items, namesItems, currencyRate);
+			console.log('eqwqe');
+			setNewItems(allData.t);
+		}, 1000);
+	}
 }
 
 </script>
 
 <template>
-  <div class="wrapper">
-    <Items />
-    <Busket />
-  </div>
+	<div class="wrapper">
+		<Items />
+		<Busket />
+	</div>
 </template>
 
 <style>
 .wrapper {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 </style>

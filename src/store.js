@@ -32,9 +32,15 @@ const store = createStore({
                 if (payload.leftover > 0) state.storeItems[ind].items[indItem].leftover -= 1;
             }
             
+        },
+        UPDATE_STORE(state, payload) {
+            state.storeItems = payload;
         }
     },
     actions: {
+        setNewItems(context, payload) {
+            context.commit("UPDATE_STORE", payload);
+        },
         changeBusket(context, payload) {
             const payloadRR = {
                 payload: payload,
