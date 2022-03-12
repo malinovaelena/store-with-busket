@@ -5,7 +5,7 @@ import Items from "@/components/Items.vue";
 import Busket from "@/components/Busket.vue";
 
 import names from './../data/names.json';
-const data = await import('./../data/data.json');
+
 const namesItems = names;
 
 const random = (min, max) => {
@@ -36,10 +36,6 @@ const formattingData = (items, names, currentExchangeRate) => {
     return allData;
 }
 
-const allData = {
-    t: formattingData(data.Value.Goods, namesItems, random(20, 80))
-};
-
 export default {
 	components: {
 		Items,
@@ -49,13 +45,19 @@ export default {
 		const store = useStore();
 		const { setNewItems } = useActions(['setNewItems']);
 
+		const setData = () => {
+			const data = import('./../data/data.json').then((res) => {
+				const items = res.Value.Goods;
+				const currencyRate = random(20, 80);
+				const allData = formattingData(items, namesItems, currencyRate);
+				setNewItems(allData);
+			});
+		};
+		setData();
+
 		const queries = setInterval(() => {
-			const items = data.Value.Goods;
-			const currencyRate = random(20, 80);
-			allData.t = formattingData(items, namesItems, currencyRate);
-			console.log('eqwqe');
-			setNewItems(allData.t);
-		}, 1000);
+			setData();
+		}, 3000);
 	}
 }
 

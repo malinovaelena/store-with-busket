@@ -5,7 +5,7 @@
                 {{ group.nameGroup }}
             </div>
             <div class="items-group__items" :class="{'hidden': closed}">
-                <Item v-for="item in group.items" :value="item" :key="item.title" @click="changeBusket(item)" />
+                <Item v-for="item in group.items" :value="item" :key="item.title" @click="changeBusket({payload: item, amount: -1})" />
             </div>
         </div>
     </div>

@@ -34,23 +34,34 @@ const store = createStore({
             
         },
         UPDATE_STORE(state, payload) {
-            state.storeItems = payload;
+            if (state.storeItems.length) {
+                state.storeItems.forEach((group) => {
+                    group.items.forEach((item) => {
+                        const groupInd = payload.findIndex((k) => k.nameGroup === item.groupName);
+                        if (groupInd > -1) {
+                            const itemInd = payload[groupInd].items.findIndex((t) => t.id === item.id);
+                            item.currency = payload[groupInd].items[itemInd].currency;
+                        }
+                    });
+                })
+            } else {
+                state.storeItems = payload;
+            }
         }
     },
     actions: {
         setNewItems(context, payload) {
             context.commit("UPDATE_STORE", payload);
         },
-        changeBusket(context, payload) {
+        changeBusket(context, {payload, amount}) {
             const payloadRR = {
                 payload: payload,
-                amount: -1
+                amount: amount
             };
             context.commit("CHANGE_BUSKET", payload);
             context.commit("CHANGE_STORE", payloadRR);
         },
         removeBusketItems(context, payload) {
-            const a = payload.amount;
             const payloadR = {
                 payload: payload,
                 amount: payload.amount

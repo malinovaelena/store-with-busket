@@ -5,7 +5,7 @@
             {{ value.name }}({{ value.leftover }}) 
         </div>
         <div class="item-price">
-            {{ Math.round(value.price * value.currency) }} руб.
+            {{ (value.price * value.currency).toFixed(2) }} руб.
         </div>
     </div>
 </template>

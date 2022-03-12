@@ -12,11 +12,11 @@
                     <div class="col name">{{item.name}}</div>
                     <div class="col amout">
                         <label>
-                            <input :value="item.amount" />
+                            <input :value="item.amount" @change="updateAmount($event, item.id)" @input="formatted"/>
                             шт.
                         </label>
                     </div>
-                    <div class="col price">{{item.price}} / шт.</div>
+                    <div class="col price">{{ (item.price * item.currency).toFixed(2) }} руб/ шт.</div>
                     <div class="col">
                         <button @click="removeBusketItems(item)">Удалить</button>
                     </div>
@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="total">
-            <div class="total-amount">{{totalAmount}} / руб.</div>
+            <div class="total-amount">{{ totalAmount }} / руб.</div>
         </div>
     </div>
 </template>
@@ -40,6 +40,7 @@ export default {
         const store = useStore();
         const totalAmount = ref(0);
         const { removeBusketItems } = useActions(["removeBusketItems"]);
+        const { changeBusket } = useActions(["changeBusket"]);
         
         const dataBusket = computed(() => store.getters.busketDataState);
 
@@ -48,18 +49,31 @@ export default {
         })
 
         watch(dataBusket, (current, old) => {
+            totalAmount.value = 0;
                 dataBusket.value.forEach(item => {
-                    totalAmount.value += (item.amount * item.price)
+                    totalAmount.value += ((item.price * item.currency).toFixed(2) * item.amount);
                 });
             },
             {deep: true}
         );
+
+        const formatted = (event) => {
+            if (event.target.value.match(/\D/gm)) {
+                const value = event.target.value.replace(/\D/gm, '');
+            }
+        };
+
+        const updateAmount = (event, id) => {
+            changeBusket(dataBusket.value[id])
+        };
         
         return {
             dataBusket,
             totalAmount,
             busketDataState,
-            removeBusketItems
+            removeBusketItems,
+            formatted,
+            updateAmount
         }
     }
 }
