@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="total">
-            <div class="total-amount" :class="currentClass">{{ totalAmount }} / руб.</div>
+            <div v-if="totalAmount > 0" class="total-amount" :class="currentClass">{{ totalAmount.toFixed(2) }} / руб.</div>
         </div>
     </div>
 </template>
@@ -57,9 +57,9 @@ export default {
             },
             {deep: true}
         );
+
         watch(totalAmount, (current, prev) => {
             currentClass.value = current > prev ? 'cost--expensive':'cost--chipper';
-            console.log(currentClass.value);
         });
 
         const formatted = (event, id) => {
@@ -90,29 +90,37 @@ export default {
 <style>
 .cost--chipper {
     box-shadow:  0px 0px 13px 0px rgba(50, 142, 50, 0.75);
+    background: rgba(50, 142, 50, 0.3);
     transition: 1s;
+    padding: 5px 10px;
+    border-radius: 3px;
 }
 .cost--expensive {
     box-shadow:  0px 0px 13px 0px rgba(232, 48, 50, 0.75);
+    background: rgba(232, 48, 50, 0.3);
     transition: 1s;
+    padding: 5px 10px;
+    border-radius: 3px;
 }
 .busket {
     padding: 20px;
     width: 600px;
-    background: #e9ecef;
+    border: 3px solid #e9ecef;
+    border-radius: 3px;
+    margin-left: 20px;
 }
 .busket-table__row {
     margin: 10px 0;
 }
 .col {
-    width: 25%;
+    width: 12%;
 }
 .col.name {
     width: 50%;
 }
 .col.amout,
 .col.price {
-    width: 20%;
+    width: 23%;
 }
 .amout label,
 .amout label input {
@@ -124,8 +132,9 @@ export default {
     padding: 10px;
 }
 .busket-table__row {
-    padding: 0 10px;
+    padding: 4px 10px;
     border: 1px solid #ced4da;
+    border-radius: 3px;
 }
 .busket-table__header,
 .busket-table__row {
@@ -134,6 +143,7 @@ export default {
     align-items: center;
 }
 .total {
+    margin-top: 20px;
     display: flex;
     justify-content: flex-end;
 }

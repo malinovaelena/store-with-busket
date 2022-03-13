@@ -26,9 +26,10 @@ export default {
 .item {
     display: flex;
     justify-content: space-between;
-    border-top: 1px solid black;
+    border-bottom: 1px solid black;
     cursor: pointer;
     user-select: none;
+    padding: 5px;
 }
 .item-title {
     flex-grow: 1;

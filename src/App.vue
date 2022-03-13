@@ -49,6 +49,7 @@ export default {
 		const setData = () => {
 			const data = import('./../data/data.json').then((res) => {
 				const items = res.Value.Goods;
+				// randomly choosen currency value
 				const currencyRate = random(20, 80);
 				const allData = formattingData(items, namesItems, currencyRate);
 				setNewItems(allData);
@@ -74,7 +75,6 @@ export default {
 <style>
 .wrapper {
 	font-family: 'Roboto', sans-serif;
-	font-family: 'Roboto Slab', serif;
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
