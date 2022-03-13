@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="total">
-            <div class="total-amount">{{ totalAmount }} / руб.</div>
+            <div class="total-amount" :class="currentClass">{{ totalAmount }} / руб.</div>
         </div>
     </div>
 </template>
@@ -39,6 +39,7 @@ export default {
     setup() {
         const store = useStore();
         const totalAmount = ref(0);
+        let currentClass = ref('');
         const { removeBusketItems } = useActions(["removeBusketItems"]);
         const { changeBusket } = useActions(["changeBusket"]);
         
@@ -56,6 +57,10 @@ export default {
             },
             {deep: true}
         );
+        watch(totalAmount, (current, prev) => {
+            currentClass.value = current > prev ? 'cost--expensive':'cost--chipper';
+            console.log(currentClass.value);
+        });
 
         const formatted = (event, id) => {
             const item = dataBusket.value.find(i => i.id === id);
@@ -76,15 +81,25 @@ export default {
             busketDataState,
             removeBusketItems,
             formatted,
-            updateAmount
+            updateAmount,
+            currentClass
         }
     }
 }
 </script>
 <style>
+.cost--chipper {
+    box-shadow:  0px 0px 13px 0px rgba(50, 142, 50, 0.75);
+    transition: 1s;
+}
+.cost--expensive {
+    box-shadow:  0px 0px 13px 0px rgba(232, 48, 50, 0.75);
+    transition: 1s;
+}
 .busket {
+    padding: 20px;
     width: 600px;
-    background: lightblue;
+    background: #e9ecef;
 }
 .busket-table__row {
     margin: 10px 0;
@@ -103,10 +118,20 @@ export default {
 .amout label input {
     max-width: 50px;
 }
+.busket-table__header {
+    font-size: 18px;
+    background: #d1e7dd;
+    padding: 10px;
+}
+.busket-table__row {
+    padding: 0 10px;
+    border: 1px solid #ced4da;
+}
 .busket-table__header,
 .busket-table__row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .total {
     display: flex;

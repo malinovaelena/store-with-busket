@@ -38,6 +38,15 @@ const store = createStore({
                 state.storeItems[ind].items[indItem].leftover = leftover;
             } else state.storeItems[ind].items[indItem].leftover = state.storeItems[ind].items[indItem].totalAmount;
         },
+        UPDATE_BUSKET(state, payload) {
+            if (state.busketItems.length) {
+                state.busketItems.forEach((item) => {
+                    const groupInd = payload.findIndex(group => group.nameGroup === item.groupName);
+                    const itemInd = payload[groupInd].items.findIndex((t) => t.id === item.id);
+                    item.currency = payload[groupInd].items[itemInd].currency;    
+                })
+            }
+        },
         UPDATE_STORE(state, payload) {
             if (state.storeItems.length) {
                 state.storeItems.forEach((group) => {
@@ -57,6 +66,7 @@ const store = createStore({
     actions: {
         setNewItems(context, payload) {
             context.commit("UPDATE_STORE", payload);
+            context.commit("UPDATE_BUSKET", payload);
         },
         changeBusket(context, {payload, amount}) {
             context.commit("CHANGE_BUSKET", {payload: payload, amount: amount});

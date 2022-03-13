@@ -73,6 +73,8 @@ export default {
 
 <style>
 .wrapper {
+	font-family: 'Roboto', sans-serif;
+	font-family: 'Roboto Slab', serif;
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
