@@ -8,11 +8,11 @@
                 <div class="col"></div>
             </div>
             <div class="busket-table__body">
-                <div class="busket-table__row" v-for="item in dataBusket">
+                <div class="busket-table__row" v-for="item in dataBusket" :key="item.id">
                     <div class="col name">{{item.name}}</div>
                     <div class="col amout">
                         <label>
-                            <input :value="item.amount" @change="updateAmount($event, item.id)" @input="formatted"/>
+                            <input v-model="item.amount" @input="formatted($event, item.id)" @change="updateAmount($event, item.id)"/>
                             шт.
                         </label>
                     </div>
@@ -30,7 +30,7 @@
 </template>
 <script>
 import { useActions, useGetters } from "vuex-composition-helpers/dist";
-import { ref, computed, watch, watchEffect } from "vue";
+import { ref, computed, watch } from "vue";
 import { useStore } from 'vuex';
 
 
@@ -57,14 +57,17 @@ export default {
             {deep: true}
         );
 
-        const formatted = (event) => {
+        const formatted = (event, id) => {
+            const item = dataBusket.value.find(i => i.id === id);
             if (event.target.value.match(/\D/gm)) {
-                const value = event.target.value.replace(/\D/gm, '');
+                item.amount = parseInt(event.target.value.replace(/\D/gm, ''));
             }
+            if (parseInt(event.target.value) > item.leftover) item.amount = item.leftover;
         };
 
         const updateAmount = (event, id) => {
-            changeBusket(dataBusket.value[id])
+            const value = dataBusket.value.find(i => i.id == id);
+            changeBusket({payload: value, amount: parseInt(event.target.value) });
         };
         
         return {

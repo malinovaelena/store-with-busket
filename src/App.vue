@@ -23,7 +23,8 @@ const formattingData = (items, names, currentExchangeRate) => {
                 id: i.T ,
                 name: nameItem[1].B[i.T].N,
                 leftover: i.P,
-                currency: currentExchangeRate
+                currency: currentExchangeRate,
+				totalAmount: i.P
             }
         })
     

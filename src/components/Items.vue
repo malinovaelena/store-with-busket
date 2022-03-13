@@ -5,7 +5,10 @@
                 {{ group.nameGroup }}
             </div>
             <div class="items-group__items" :class="{'hidden': closed}">
-                <Item v-for="item in group.items" :value="item" :key="item.title" @click="changeBusket({payload: item, amount: -1})" />
+                <Item v-for="item in group.items" 
+                    :value="item" 
+                    :key="item.title" 
+                    @click="addToBusket(item)" />
             </div>
         </div>
     </div>
@@ -23,7 +26,7 @@ export default {
     },
     setup() {
         const store = useStore();
-        const { changeBusket } = useActions(["changeBusket"]);
+        const { addToBusket } = useActions(["addToBusket"]);
         const closed = ref(false);
         const allData = computed(() => store.getters.allDataState);
 
@@ -31,7 +34,7 @@ export default {
             allData,
             Item,
             closed,
-            changeBusket
+            addToBusket
         }
     }
 }
