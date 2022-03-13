@@ -7,49 +7,52 @@ const store = createStore({
     storeItems: [],
   },
   mutations: {
+    //   Change busket - in args - final amount for item in busket
     CHANGE_BUSKET(state, { payload, amount }) {
-      const itemIndex = state.busketItems.findIndex((i) => i.id === payload.id);
-      state.busketItems[itemIndex].amount = amount;
+        const itemIndex = state.busketItems.findIndex((i) => i.id === payload.id);
+        state.busketItems[itemIndex].amount = amount;
     },
+    // Added 1 item only to busket 
     ADD_TO_BUSKET(state, payload) {
-      if (payload.leftover < 1) return;
-      const itemIndex = state.busketItems.findIndex((i) => i.id === payload.id);
-      if (itemIndex > -1) {
-        state.busketItems[itemIndex].amount += 1;
-      } else {
-        state.busketItems.push({
-          ...payload,
-          amount: 1,
-        });
-      }
-      const ind = state.storeItems.findIndex(
-        (i) => i.nameGroup === payload.groupName
-      );
-      const indItem = state.storeItems[ind].items.findIndex(
-        (i) => i.id === payload.id
-      );
-      if (payload.leftover > 0)
+        if (payload.leftover < 1) return;
+        const itemIndex = state.busketItems.findIndex((i) => i.id === payload.id);
+        if (itemIndex > -1) {
+            state.busketItems[itemIndex].amount += 1;
+        } else {
+            state.busketItems.push({
+            ...payload,
+            amount: 1,
+            });
+        }
+        const ind = state.storeItems.findIndex(
+            (i) => i.nameGroup === payload.groupName
+        );
+        const indItem = state.storeItems[ind].items.findIndex(
+            (i) => i.id === payload.id
+        );
         state.storeItems[ind].items[indItem].leftover -= 1;
     },
     REMOVE_BUSKET_ITEMS(state, payload) {
       const ind = state.busketItems.findIndex((i) => i.id === payload.id);
       state.busketItems.splice(ind, 1);
     },
+    // Change store - in args - final amount for item in store
     CHANGE_STORE(state, { payload, amount }) {
-      const ind = state.storeItems.findIndex(
+      const indGroup = state.storeItems.findIndex(
         (i) => i.nameGroup === payload.groupName
       );
-      const indItem = state.storeItems[ind].items.findIndex(
+      const indItem = state.storeItems[indGroup].items.findIndex(
         (i) => i.id === payload.id
       );
       const leftover =
-        state.storeItems[ind].items[indItem].totalAmount - amount;
+        state.storeItems[indGroup].items[indItem].totalAmount - amount;
       if (amount > 0 && leftover > -1) {
-        state.storeItems[ind].items[indItem].leftover = leftover;
+        state.storeItems[indGroup].items[indItem].leftover = leftover;
       } else
-        state.storeItems[ind].items[indItem].leftover =
-          state.storeItems[ind].items[indItem].totalAmount;
+        state.storeItems[indGroup].items[indItem].leftover =
+          state.storeItems[indGroup].items[indItem].totalAmount;
     },
+    // Update busket if our currency value change
     UPDATE_BUSKET(state, payload) {
       if (state.busketItems.length) {
         state.busketItems.forEach((item) => {
@@ -63,6 +66,7 @@ const store = createStore({
         });
       }
     },
+    // Update currency in every item of store
     UPDATE_STORE(state, payload) {
       if (state.storeItems.length) {
         state.storeItems.forEach((group) => {

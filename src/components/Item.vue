@@ -4,10 +4,10 @@
     title="Добавить в корзину"
     :class="{ 'item--out-of-stock': value.leftover === 0 }"
   >
-    <div class="item-title">{{ value.name }}({{ value.leftover }})</div>
-    <div class="item-price">
+    <span class="item-title">{{ value.name }}({{ value.leftover }})</span>
+    <span class="item-price">
       {{ (value.price * value.currency).toFixed(2) }} руб.
-    </div>
+    </span>
   </div>
 </template>
 <script>

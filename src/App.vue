@@ -47,7 +47,7 @@ export default {
     const setData = () => {
       import("./../data/data.json").then((res) => {
         const items = res.Value.Goods;
-        // randomly choosen currency value
+        // NOTE: randomly choosen currency value
         const currencyRate = random(20, 80);
         const allData = formattingData(items, namesItems, currencyRate);
         setNewItems(allData);
